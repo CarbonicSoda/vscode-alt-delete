@@ -1,0 +1,101 @@
+{
+	"name": "alt-delete",
+	"version": "1.0.0",
+	"publisher": "carbonsoda",
+	"author": {
+		"name": "David W."
+	},
+	"license": "MIT",
+	"homepage": "https://github.com/CarbonicSoda/vscode-alt-delete/blob/main/README.md",
+	"bugs": {
+		"url": "https://github.com/CarbonicSoda/vscode-alt-delete/issues",
+		"email": "carbonsoda@outlook.com"
+	},
+	"repository": "https://github.com/CarbonicSoda/vscode-alt-delete",
+	"icon": "media/alt-delete-icon.png",
+	"engines": {
+		"vscode": "^1.70.0"
+	},
+	"displayName": "Alt-Delete",
+	"description": "Frustrated using unflexible Ctrl-Keys? Alt-Delete comes to rescue!",
+	"categories": [
+		"Keymaps"
+	],
+	"keywords": [
+		"Alt-Keys",
+		"Counterpart",
+		"Ctrl-Delete"
+	],
+	"main": "./extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"title": "Alt-Backspace",
+				"command": "alt-delete.alt-backspace"
+			},
+			{
+				"title": "Alt-Delete",
+				"command": "alt-delete.alt-delete"
+			},
+			{
+				"title": "Alt--",
+				"command": "alt-delete.alt--"
+			},
+			{
+				"title": "Alt++",
+				"command": "alt-delete.alt++"
+			},
+			{
+				"title": "Alt-Shift--",
+				"command": "alt-delete.alt-shift--"
+			},
+			{
+				"title": "Alt-Shift++",
+				"command": "alt-delete.alt-shift++"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "alt-delete.alt-backspace",
+				"key": "Alt+Backspace"
+			},
+			{
+				"command": "alt-delete.alt-delete",
+				"key": "Alt+Delete"
+			},
+			{
+				"command": "alt-delete.alt--",
+				"key": "Alt+-"
+			},
+			{
+				"command": "alt-delete.alt++",
+				"key": "Alt+="
+			},
+			{
+				"command": "alt-delete.alt-shift--",
+				"key": "Alt+Shift+-"
+			},
+			{
+				"command": "alt-delete.alt-shift++",
+				"key": "Alt+Shift+="
+			}
+		]
+	},
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.70.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "18.x",
+		"eslint": "^8.57.0",
+		"typescript": "^5.4.5",
+		"@vscode/test-cli": "^0.0.9",
+		"@vscode/test-electron": "^2.3.9"
+	}
+}
