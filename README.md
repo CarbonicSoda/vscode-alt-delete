@@ -16,4 +16,4 @@ And **MUCH** more!
 
 ## DEMO
 
-![Demo](https://github.com/CarbonicSoda/vscode-alt-delete/blob/main/media/alt-delete-showcase.gif?raw=true)
+![Demo](https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/media/alt-delete-showcase.gif)
