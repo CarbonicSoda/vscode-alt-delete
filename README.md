@@ -12,8 +12,6 @@ Unlike their Ctrl cousins, Alt-Keys will stop at **CAPITAL** characters:
 eg. with Ctrl-Backspace, **camelCase** would be wiped out  
  with Alt-Backspace, **camelCase** would become **camel**
 
-And **MUCH** more!
-
 ## DEMO
 
 ![Demo](https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/media/alt-delete-showcase.gif?raw=true)
