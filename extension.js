@@ -47,20 +47,20 @@ function getDelta(editor, mode) {
 	const currLineRange = document.lineAt(currLine).range;
 
 	const editRange = new vscode.Range(currPos, backward ? currLineRange.start : currLineRange.end);
-	let text = document.getText(editRange);
-	if (text.length === 0) {
+	const tmp = document.getText(editRange);
+	if (tmp.length === 0) {
 		if (backward && currLine > 0) return new Delta(document.lineAt(currLine - 1).text.length, -1);
 		if (!backward && currLine < document.lineCount - 1)
 			return new Delta(-document.lineAt(currLine).text.length, 1);
 	}
 
-	const extraSpaceCnt = text.match(backward ? /\s*$/ : /^\s*/)[0].length;
-	text = backward ? text.trimEnd() : text.trimStart();
+	const text = backward ? tmp.trimEnd() : tmp.trimStart();
 	if (!text) {
 		if (backward) return new Delta(editRange.start.character - editRange.end.character);
 		return new Delta(editRange.end.character - editRange.start.character);
 	}
 
+	const extraSpaceCnt = tmp.length - text.length;
 	if (getCharClass(text.at(backward ? -1 : 0)) === CharClass.UPPER) {
 		if (backward) return new Delta(-1 - extraSpaceCnt);
 		if (getCharClass(text[1]) === CharClass.UPPER) return new Delta(1 + extraSpaceCnt);
@@ -109,7 +109,6 @@ class Delta {
 		this.lineDelta = lineDelta;
 	}
 }
-
 /**
  * delete content from current position according to delta
  * @param {vscode.TextEditorEdit} editBuilder
@@ -119,7 +118,6 @@ class Delta {
 function deleteDelta(editBuilder, currPos, delta) {
 	editBuilder.delete(new vscode.Range(currPos, currPos.translate(delta.lineDelta, delta.charDelta)));
 }
-
 /**
  * move current position in document with delta
  * @param {vscode.TextEditor} editor
