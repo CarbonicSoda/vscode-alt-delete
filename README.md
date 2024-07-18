@@ -14,4 +14,4 @@ eg. with Ctrl-Backspace, **camelCase** would be wiped out
 
 ## DEMO
 
-![Demo](https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/media/alt-delete-showcase.gif?raw=true)
+![Demo](https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/media/showcase.gif?raw=true)
