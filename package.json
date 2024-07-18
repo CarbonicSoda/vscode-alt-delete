@@ -1,6 +1,6 @@
 {
 	"name": "alt-delete",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"publisher": "carbonsoda",
 	"author": {
 		"name": "David W. YunCheng"
@@ -17,7 +17,7 @@
 		"vscode": "^1.70.0"
 	},
 	"displayName": "Alt-Delete",
-	"description": "Frustrated using unflexible Ctrl-Keys? Alt-Delete comes to rescue!",
+	"description": "Provides cousins of Ctrl-Del and more for your ease",
 	"categories": [
 		"Keymaps"
 	],
