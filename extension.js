@@ -50,8 +50,7 @@ function getDelta(editor, mode) {
 	const tmp = document.getText(editRange);
 	if (tmp.length === 0) {
 		if (backward && currLine > 0) return new Delta(document.lineAt(currLine - 1).text.length, -1);
-		if (!backward && currLine < document.lineCount - 1)
-			return new Delta(-document.lineAt(currLine).text.length, 1);
+		if (!backward && currLine < document.lineCount - 1) return new Delta(-document.lineAt(currLine).text.length, 1);
 	}
 
 	const text = backward ? tmp.trimEnd() : tmp.trimStart();
@@ -69,8 +68,7 @@ function getDelta(editor, mode) {
 	if (backward) {
 		let i = 1;
 		while (getCharClass(text.at(-i - 1)) === getCharClass(text.at(-i)) && i < text.length) i++;
-		if (getCharClass(text.at(-i - 1)) === CharClass.UPPER && getCharClass(text.at(-i)) === CharClass.LOWER)
-			i++;
+		if (getCharClass(text.at(-i - 1)) === CharClass.UPPER && getCharClass(text.at(-i)) === CharClass.LOWER) i++;
 		return new Delta(-i - extraSpaceCnt);
 	} else {
 		let i = getCharClass(text[0]) === CharClass.UPPER ? 1 : 0;
@@ -81,11 +79,11 @@ function getDelta(editor, mode) {
 
 // enum character classes
 const CharClass = Object.freeze({
-	UPPER: "A",
-	LOWER: "a",
-	DIGIT: "0",
-	SPACE: " ",
-	SYMBOL: "@",
+	UPPER: 0,
+	LOWER: 1,
+	DIGIT: 2,
+	SPACE: 3,
+	SYMBOL: 4,
 });
 /**
  * @param {string} char single character
