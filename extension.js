@@ -13,19 +13,19 @@ function activate(context) {
 			const delta = getDelta(editor, "forward");
 			deleteDelta(editBuilder, editor.selection.active, delta);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt--", (editor) => {
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-left", (editor) => {
 			const delta = getDelta(editor, "backward");
 			moveDelta(editor, delta);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt++", (editor) => {
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-right", (editor) => {
 			const delta = getDelta(editor, "forward");
 			moveDelta(editor, delta);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift--", (editor) => {
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-left", (editor) => {
 			const delta = getDelta(editor, "backward");
 			moveDelta(editor, delta, true);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift++", (editor) => {
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-right", (editor) => {
 			const delta = getDelta(editor, "forward");
 			moveDelta(editor, delta, true);
 		}),
@@ -128,7 +128,7 @@ function moveDelta(editor, delta, anchor = false) {
 	editor.selection = new vscode.Selection(anchor ? editor.selection.anchor : newPos, newPos);
 }
 
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
 	activate,

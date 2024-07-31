@@ -1,9 +1,9 @@
 {
 	"name": "alt-delete",
-	"version": "1.0.6",
+	"version": "1.1.0",
 	"publisher": "carbonsoda",
 	"author": {
-		"name": "David W. YunCheng"
+		"name": "David W YC"
 	},
 	"license": "MIT",
 	"homepage": "https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/README.md",
@@ -17,7 +17,7 @@
 		"vscode": "^1.70.0"
 	},
 	"displayName": "Alt-Delete",
-	"description": "Provides cousins of Ctrl-Del and more for your ease",
+	"description": "Keymaps of Ctrl-Del cousins and more for your ease",
 	"categories": [
 		"Keymaps"
 	],
@@ -38,23 +38,39 @@
 				"command": "alt-delete.alt-delete"
 			},
 			{
-				"title": "Alt--",
-				"command": "alt-delete.alt--"
+				"title": "Alt-Left",
+				"command": "alt-delete.alt-left"
 			},
 			{
-				"title": "Alt++",
-				"command": "alt-delete.alt++"
+				"title": "Alt-Right",
+				"command": "alt-delete.alt-right"
 			},
 			{
-				"title": "Alt-Shift--",
-				"command": "alt-delete.alt-shift--"
+				"title": "Alt-Shift-Left",
+				"command": "alt-delete.alt-shift-left"
 			},
 			{
-				"title": "Alt-Shift++",
-				"command": "alt-delete.alt-shift++"
+				"title": "Alt-Shift-Right",
+				"command": "alt-delete.alt-shift-right"
 			}
 		],
 		"keybindings": [
+			{
+				"command": "alt-delete.alt-left",
+				"key": "Alt+,"
+			},
+			{
+				"command": "alt-delete.alt-right",
+				"key": "Alt+."
+			},
+			{
+				"command": "alt-delete.alt-shift-left",
+				"key": "Alt+Shift+,"
+			},
+			{
+				"command": "alt-delete.alt-shift-right",
+				"key": "Alt+Shift+."
+			},
 			{
 				"command": "alt-delete.alt-backspace",
 				"key": "Alt+Backspace"
@@ -64,19 +80,19 @@
 				"key": "Alt+Delete"
 			},
 			{
-				"command": "alt-delete.alt--",
+				"command": "alt-delete.alt-left",
 				"key": "Alt+-"
 			},
 			{
-				"command": "alt-delete.alt++",
+				"command": "alt-delete.alt-right",
 				"key": "Alt+="
 			},
 			{
-				"command": "alt-delete.alt-shift--",
+				"command": "alt-delete.alt-shift-left",
 				"key": "Alt+Shift+-"
 			},
 			{
-				"command": "alt-delete.alt-shift++",
+				"command": "alt-delete.alt-shift-right",
 				"key": "Alt+Shift+="
 			}
 		]
