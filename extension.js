@@ -3,30 +3,30 @@ const vscode = require("vscode");
 /**
  * @param {vscode.ExtensionContext} context
  */
-function activate(context) {
+async function activate(context) {
 	context.subscriptions.push(
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-backspace", (editor, editBuilder) => {
-			const delta = getDelta(editor, "backward");
-			deleteDelta(editBuilder, editor.selection.active, delta);
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-backspace", async (editor) => {
+			const delta = await getDelta(editor, "backward");
+			deleteDelta(editor, editor.selection.active, delta);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-delete", (editor, editBuilder) => {
-			const delta = getDelta(editor, "forward");
-			deleteDelta(editBuilder, editor.selection.active, delta);
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-delete", async (editor) => {
+			const delta = await getDelta(editor, "forward");
+			deleteDelta(editor, editor.selection.active, delta);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-left", (editor) => {
-			const delta = getDelta(editor, "backward");
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-left", async (editor) => {
+			const delta = await getDelta(editor, "backward");
 			moveDelta(editor, delta);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-right", (editor) => {
-			const delta = getDelta(editor, "forward");
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-right", async (editor) => {
+			const delta = await getDelta(editor, "forward");
 			moveDelta(editor, delta);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-left", (editor) => {
-			const delta = getDelta(editor, "backward");
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-left", async (editor) => {
+			const delta = await getDelta(editor, "backward");
 			moveDelta(editor, delta, true);
 		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-right", (editor) => {
-			const delta = getDelta(editor, "forward");
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-right", async (editor) => {
+			const delta = await getDelta(editor, "forward");
 			moveDelta(editor, delta, true);
 		}),
 	);
@@ -36,9 +36,9 @@ function activate(context) {
  * get delta for alt-functions shift distance
  * @param {vscode.TextEditor} editor
  * @param {"backward" | "forward"} mode
- * @returns {Delta}
+ * @returns {Promise<Delta>}
  */
-function getDelta(editor, mode) {
+async function getDelta(editor, mode) {
 	const backward = mode === "backward";
 
 	const document = editor.document;
@@ -60,19 +60,23 @@ function getDelta(editor, mode) {
 	}
 
 	const extraSpaceCnt = tmp.length - text.length;
-	if (getCharClass(text.at(backward ? -1 : 0)) === CharClass.UPPER) {
+	if ((await getCharClass(text.at(backward ? -1 : 0))) === CharClass.UPPER) {
 		if (backward) return new Delta(-1 - extraSpaceCnt);
-		if (getCharClass(text[1]) === CharClass.UPPER) return new Delta(1 + extraSpaceCnt);
+		if ((await getCharClass(text[1])) === CharClass.UPPER) return new Delta(1 + extraSpaceCnt);
 	}
 
 	if (backward) {
 		let i = 1;
-		while (getCharClass(text.at(-i - 1)) === getCharClass(text.at(-i)) && i < text.length) i++;
-		if (getCharClass(text.at(-i - 1)) === CharClass.UPPER && getCharClass(text.at(-i)) === CharClass.LOWER) i++;
+		while ((await getCharClass(text.at(-i - 1))) === (await getCharClass(text.at(-i))) && i < text.length) i++;
+		if (
+			(await getCharClass(text.at(-i - 1))) === CharClass.UPPER &&
+			(await getCharClass(text.at(-i))) === CharClass.LOWER
+		)
+			i++;
 		return new Delta(-i - extraSpaceCnt);
 	} else {
-		let i = getCharClass(text[0]) === CharClass.UPPER ? 1 : 0;
-		while (getCharClass(text[i + 1]) === getCharClass(text[i]) && i < text.length - 1) i++;
+		let i = (await getCharClass(text[0])) === CharClass.UPPER ? 1 : 0;
+		while ((await getCharClass(text[i + 1])) === (await getCharClass(text[i])) && i < text.length - 1) i++;
 		return new Delta(i + extraSpaceCnt + 1);
 	}
 }
@@ -85,11 +89,12 @@ const CharClass = Object.freeze({
 	SPACE: 3,
 	SYMBOL: 4,
 });
+
 /**
  * @param {string} char single character
- * @returns {*} corresponding character class enumerated in {@link CharClass}
+ * @returns {Promise<any>} corresponding character class enumerated in {@link CharClass}
  */
-function getCharClass(char) {
+async function getCharClass(char) {
 	if (/[A-Z]/.test(char)) return CharClass.UPPER;
 	if (/[a-z]/.test(char)) return CharClass.LOWER;
 	if (/\d/.test(char)) return CharClass.DIGIT;
@@ -107,28 +112,32 @@ class Delta {
 		this.lineDelta = lineDelta;
 	}
 }
+
 /**
  * delete content from current position according to delta
- * @param {vscode.TextEditorEdit} editBuilder
+ * @param {vscode.TextEditor} editor
  * @param {vscode.Position} currPos
  * @param {Delta} delta
  */
-function deleteDelta(editBuilder, currPos, delta) {
-	editBuilder.delete(new vscode.Range(currPos, currPos.translate(delta.lineDelta, delta.charDelta)));
+async function deleteDelta(editor, currPos, delta) {
+	await editor.edit(async (editBuilder) => {
+		editBuilder.delete(new vscode.Range(currPos, currPos.translate(delta.lineDelta, delta.charDelta)));
+	});
 }
+
 /**
  * move current position in document with delta
  * @param {vscode.TextEditor} editor
  * @param {vscode.Position} currPos
  * @param {Delta} delta
  */
-function moveDelta(editor, delta, anchor = false) {
+async function moveDelta(editor, delta, anchor = false) {
 	const currPos = editor.selection.active;
 	const newPos = new vscode.Position(currPos.line + delta.lineDelta, currPos.character + delta.charDelta);
 	editor.selection = new vscode.Selection(anchor ? editor.selection.anchor : newPos, newPos);
 }
 
-function deactivate() { }
+async function deactivate() {}
 
 module.exports = {
 	activate,
