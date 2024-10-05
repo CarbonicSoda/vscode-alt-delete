@@ -1,6 +1,6 @@
 {
 	"name": "alt-delete",
-	"version": "1.1.5",
+	"version": "2.0.0",
 	"publisher": "carbonsoda",
 	"author": {
 		"name": "David W."
@@ -26,7 +26,7 @@
 		"Counterpart",
 		"Ctrl-Delete"
 	],
-	"main": "./extension-min.js",
+	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{

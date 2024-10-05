@@ -1,3 +1,6 @@
+### UPDATE
+**Now supports multiple selections!**
+
 # FEATURES
 
 Frustrated with using unflexible Ctrl-Keys?  

@@ -5,44 +5,60 @@ const vscode = require("vscode");
  */
 async function activate(context) {
 	context.subscriptions.push(
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-backspace", async (editor) => {
-			const delta = await getDelta(editor, "backward");
-			deleteDelta(editor, editor.selection.active, delta);
-		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-delete", async (editor) => {
-			const delta = await getDelta(editor, "forward");
-			deleteDelta(editor, editor.selection.active, delta);
-		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-left", async (editor) => {
-			const delta = await getDelta(editor, "backward");
-			moveDelta(editor, delta);
-		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-right", async (editor) => {
-			const delta = await getDelta(editor, "forward");
-			moveDelta(editor, delta);
-		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-left", async (editor) => {
-			const delta = await getDelta(editor, "backward");
-			moveDelta(editor, delta, true);
-		}),
-		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-right", async (editor) => {
-			const delta = await getDelta(editor, "forward");
-			moveDelta(editor, delta, true);
-		}),
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-backspace", await deleteFactory("backward")),
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-delete", await deleteFactory("forward")),
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-left", await moveFactory("backward")),
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-right", await moveFactory("forward")),
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-left", await moveFactory("backward", true)),
+		vscode.commands.registerTextEditorCommand("alt-delete.alt-shift-right", await moveFactory("forward", true)),
 	);
+}
+
+/**
+ * @param {"backward" | "forward"} mode
+ * @returns {Promise<(editor: vscode.TextEditor) => Promise<void>>}
+ */
+async function deleteFactory(mode) {
+	return async (/** @type {vscode.TextEditor} */ editor) => {
+		const deleteRanges = [];
+		for (let i = 0; i < editor.selections.length; i++) {
+			const delta = await getDelta(editor, i, mode);
+			deleteRanges[i] = await getDeleteRange(editor, i, delta);
+		}
+		await editor.edit(async (editBuilder) => {
+			for (const deleteRange of deleteRanges) editBuilder.delete(deleteRange);
+		});
+	};
+}
+
+/**
+ * @param {"backward" | "forward"} mode
+ * @param {boolean} [anchor=false]
+ * @returns {Promise<(editor: vscode.TextEditor) => Promise<void>>}
+ */
+async function moveFactory(mode, anchor = false) {
+	return async (/** @type {vscode.TextEditor} */ editor) => {
+		const selections = [];
+		for (let i = 0; i < editor.selections.length; i++) {
+			const delta = await getDelta(editor, i, mode);
+			selections[i] = await getMovedSelection(editor, i, delta, anchor);
+		}
+		editor.selections = selections;
+	};
 }
 
 /**
  * get delta for alt-functions shift distance
  * @param {vscode.TextEditor} editor
+ * @param {number} selectionIndex
  * @param {"backward" | "forward"} mode
  * @returns {Promise<Delta>}
  */
-async function getDelta(editor, mode) {
+async function getDelta(editor, selectionIndex, mode) {
 	const backward = mode === "backward";
 
 	const document = editor.document;
-	const currPos = editor.selection.active;
+	const currPos = editor.selections[selectionIndex].active;
 	const currLine = currPos.line;
 	const currLineRange = document.lineAt(currLine).range;
 
@@ -114,32 +130,31 @@ class Delta {
 }
 
 /**
- * delete content from current position according to delta
+ * returns delete range with original position of selectionIndex
  * @param {vscode.TextEditor} editor
- * @param {vscode.Position} currPos
+ * @param {number} selectionIndex
  * @param {Delta} delta
+ * @returns {Promise<vscode.Range>}
  */
-async function deleteDelta(editor, currPos, delta) {
-	await editor.edit(async (editBuilder) => {
-		editBuilder.delete(new vscode.Range(currPos, currPos.translate(delta.lineDelta, delta.charDelta)));
-	});
+async function getDeleteRange(editor, selectionIndex, delta) {
+	const currPos = editor.selections[selectionIndex].active;
+	return new vscode.Range(currPos, currPos.translate(delta.lineDelta, delta.charDelta));
 }
 
 /**
- * move current position in document with delta
+ * returns moved selection of selectionIndex
  * @param {vscode.TextEditor} editor
- * @param {vscode.Position} currPos
+ * @param {number} selectionIndex
  * @param {Delta} delta
+ * @param {boolean} [anchor=false]
+ * @returns {Promise<vscode.Selection>}
  */
-async function moveDelta(editor, delta, anchor = false) {
-	const currPos = editor.selection.active;
+async function getMovedSelection(editor, selectionIndex, delta, anchor = false) {
+	const currPos = editor.selections[selectionIndex].active;
 	const newPos = new vscode.Position(currPos.line + delta.lineDelta, currPos.character + delta.charDelta);
-	editor.selection = new vscode.Selection(anchor ? editor.selection.anchor : newPos, newPos);
+	return new vscode.Selection(anchor ? editor.selection.anchor : newPos, newPos);
 }
-
-async function deactivate() {}
 
 module.exports = {
 	activate,
-	deactivate,
 };
