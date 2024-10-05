@@ -150,9 +150,12 @@ async function getDeleteRange(editor, selectionIndex, delta) {
  * @returns {Promise<vscode.Selection>}
  */
 async function getMovedSelection(editor, selectionIndex, delta, anchor = false) {
-	const currPos = editor.selections[selectionIndex].active;
-	const newPos = new vscode.Position(currPos.line + delta.lineDelta, currPos.character + delta.charDelta);
-	return new vscode.Selection(anchor ? editor.selection.anchor : newPos, newPos);
+	const currSelection = editor.selections[selectionIndex];
+	const newPos = new vscode.Position(
+		currSelection.active.line + delta.lineDelta,
+		currSelection.active.character + delta.charDelta,
+	);
+	return new vscode.Selection(anchor ? currSelection.anchor : newPos, newPos);
 }
 
 module.exports = {
