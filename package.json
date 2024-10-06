@@ -1,32 +1,63 @@
 {
 	"name": "alt-delete",
-	"version": "2.0.2",
+	"displayName": "Alt Delete",
+	"description": "Keymaps of Ctrl-Del cousins for your ease",
+	"version": "2.1.0",
 	"publisher": "carbonsoda",
 	"author": {
 		"name": "David W."
 	},
+	"homepage": "https://marketplace.visualstudio.com/items?itemName=carbonsoda.alt-delete",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/CarbonicSoda/vscode-alt-delete"
+	},
 	"license": "MIT",
-	"homepage": "https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/README.md",
 	"bugs": {
 		"url": "https://github.com/CarbonicSoda/vscode-alt-delete/issues",
 		"email": "carbonsoda@outlook.com"
 	},
-	"repository": "https://github.com/CarbonicSoda/vscode-alt-delete",
-	"icon": "media/icon.png",
 	"engines": {
-		"vscode": "^1.70.0"
+		"vscode": "^1.80.0"
 	},
-	"displayName": "Alt-Delete",
-	"description": "Keymaps of Ctrl-Del cousins and more for your ease",
+	"keywords": [
+		"keys",
+		"alt",
+		"ctrl",
+		"delete",
+		"backspace",
+		"left",
+		"right",
+		"shift"
+	],
 	"categories": [
 		"Keymaps"
 	],
-	"keywords": [
-		"Alt-Keys",
-		"Counterpart",
-		"Ctrl-Delete"
+	"activationEvents": [
+		"onStartupFinished"
 	],
-	"main": "./extension.js",
+	"icon": "media/icon.png",
+	"main": "./dist/extension",
+	"browser": "./dist/web-extension",
+	"scripts": {
+		"vscode:prepublish": "webpack --mode production",
+		"compile": "webpack",
+		"watch": "tsc --watch -p ./",
+		"webpack-dev": "webpack --mode development --watch",
+		"webpack": "webpack --mode development",
+		"package": "webpack --mode production --devtool hidden-source-map",
+		"pretest": "npm run compile-tests && npm run compile && npm run lint",
+		"lint": "eslint src"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.80.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "18.x",
+		"eslint": "^8.57.0",
+		"typescript": "^5.4.5",
+		"@vscode/test-cli": "^0.0.9",
+		"@vscode/test-electron": "^2.3.9"
+	},
 	"contributes": {
 		"commands": [
 			{
@@ -56,22 +87,6 @@
 		],
 		"keybindings": [
 			{
-				"command": "alt-delete.alt-left",
-				"key": "Alt+,"
-			},
-			{
-				"command": "alt-delete.alt-right",
-				"key": "Alt+."
-			},
-			{
-				"command": "alt-delete.alt-shift-left",
-				"key": "Alt+Shift+,"
-			},
-			{
-				"command": "alt-delete.alt-shift-right",
-				"key": "Alt+Shift+."
-			},
-			{
 				"command": "alt-delete.alt-backspace",
 				"key": "Alt+Backspace"
 			},
@@ -81,7 +96,15 @@
 			},
 			{
 				"command": "alt-delete.alt-left",
+				"key": "Alt+,"
+			},
+			{
+				"command": "alt-delete.alt-left",
 				"key": "Alt+-"
+			},
+			{
+				"command": "alt-delete.alt-right",
+				"key": "Alt+."
 			},
 			{
 				"command": "alt-delete.alt-right",
@@ -89,29 +112,20 @@
 			},
 			{
 				"command": "alt-delete.alt-shift-left",
+				"key": "Alt+Shift+,"
+			},
+			{
+				"command": "alt-delete.alt-shift-left",
 				"key": "Alt+Shift+-"
+			},
+			{
+				"command": "alt-delete.alt-shift-right",
+				"key": "Alt+Shift+."
 			},
 			{
 				"command": "alt-delete.alt-shift-right",
 				"key": "Alt+Shift+="
 			}
 		]
-	},
-	"activationEvents": [
-		"onStartupFinished"
-	],
-	"scripts": {
-		"lint": "eslint .",
-		"pretest": "npm run lint",
-		"test": "vscode-test"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.70.0",
-		"@types/mocha": "^10.0.6",
-		"@types/node": "18.x",
-		"eslint": "^8.57.0",
-		"typescript": "^5.4.5",
-		"@vscode/test-cli": "^0.0.9",
-		"@vscode/test-electron": "^2.3.9"
 	}
 }
