@@ -1,5 +1,6 @@
 ### UPDATE
-**Now supports multiple selections!**
+**Now supports multiple selections!**  
+**Now supported on vscode.dev!**
 
 # FEATURES
 
@@ -17,6 +18,8 @@ Unlike their Ctrl cousins, Alt-Keys will stop at **CAPITAL** characters:
 *eg.* with Ctrl-Backspace, **camelCase** would be wiped out  
 but with Alt-Backspace, **camelCase** would become **camel**
 
-## DEMO
+####
+![SHOWCASE](https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/media/showcase.gif?raw=true)
 
-![Demo](https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/media/showcase.gif?raw=true)
+###
+*Easy editing without ever moving the mouse with the help of **Alt-Delete**!*
