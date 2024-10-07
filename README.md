@@ -1,4 +1,4 @@
-# FEATURES
+# Features
 Have you ever found the Ctrl-Backspace shortcut and its similar counterparts to be inflexible or cumbersome to use?  
 
 *Alt-Delete* comes to rescue!  
