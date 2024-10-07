@@ -1,24 +1,21 @@
-### UPDATE
-**Now supports multiple selections!**  
-**Now supported on vscode.dev!**
-
 # FEATURES
+Have you ever found the Ctrl-Backspace shortcut and its similar counterparts to be inflexible or cumbersome to use?  
 
-Frustrated with using unflexible Ctrl-Keys?  
-**Alt-Delete** comes to rescue!  
-Alt-Delete provides keymaps to counterparts of...  
-**Ctrl+**[**Backspace**, **Delete**, (shift+) **LeftArrow**, (shift+) **RightArrow**]
+*Alt-Delete* comes to rescue!  
 
-- **Ctrl+Backspace** → **Alt+Backspace**
-- **Ctrl+Delete** → **Alt+Delete**
-- (shift+) **Ctrl+LeftArrow** → (shift+) **Alt+[< / -]**
-- (shift+) **Ctrl+RightArrow** → (shift+) **Alt+[> / +]**
+Alt-Delete provides keymaps of:
+- **Ctrl-Backspace** → **Alt-Backspace**
+- **Ctrl-Delete** → **Alt-Delete**
+- (shift+) **Ctrl-LeftArrow** → (shift+) **Alt-[< / -]**
+- (shift+) **Ctrl-RightArrow** → (shift+) **Alt-[> / +]**
+
+>*Keymaps are also supported with multiple selections.*
 
 Unlike their Ctrl cousins, Alt-Keys will stop at **CAPITAL** characters:  
-*eg.* with Ctrl-Backspace, **camelCase** would be wiped out  
-but with Alt-Backspace, **camelCase** would become **camel**
+*eg.* with Ctrl-Backspace, **camelCase** would be wiped out.  
+but with Alt-Backspace, **camelCase** would become **camel**.
 
-####
+###
 ![SHOWCASE](https://github.com/CarbonicSoda/vscode-alt-delete/blob/master/media/showcase.gif?raw=true)
 
 ###

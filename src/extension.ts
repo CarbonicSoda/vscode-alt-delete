@@ -46,7 +46,7 @@ enum CharClass {
 	SYMBOL,
 }
 
-function getCharClass(char: string) {
+function charClassOf(char: string): CharClass {
 	if (/[A-Z]/.test(char)) return CharClass.UPPER;
 	if (/[a-z]/.test(char)) return CharClass.LOWER;
 	if (/\d/.test(char)) return CharClass.DIGIT;
@@ -76,23 +76,23 @@ function getDelta(editor: TextEditor, selectionIndex: number, mode: "backward" |
 	}
 
 	const extraSpaceCnt = text.length - text.length;
-	if (getCharClass(<string>text.at(isBackward ? -1 : 0)) === CharClass.UPPER) {
+	if (charClassOf(<string>text.at(isBackward ? -1 : 0)) === CharClass.UPPER) {
 		if (isBackward) return { char: -extraSpaceCnt - 1 };
-		if (getCharClass(text[1]) === CharClass.UPPER) return { char: extraSpaceCnt + 1 };
+		if (charClassOf(text[1]) === CharClass.UPPER) return { char: extraSpaceCnt + 1 };
 	}
 
 	if (isBackward) {
 		let i = 1;
-		while (getCharClass(<string>text.at(-i - 1)) === getCharClass(<string>text.at(-i)) && i < text.length) i++;
+		while (charClassOf(<string>text.at(-i - 1)) === charClassOf(<string>text.at(-i)) && i < text.length) i++;
 		if (
-			getCharClass(<string>text.at(-i - 1)) === CharClass.UPPER &&
-			getCharClass(<string>text.at(-i)) === CharClass.LOWER
+			charClassOf(<string>text.at(-i - 1)) === CharClass.UPPER &&
+			charClassOf(<string>text.at(-i)) === CharClass.LOWER
 		)
 			i++;
 		return { char: -i - extraSpaceCnt };
 	} else {
-		let i = getCharClass(text[0]) === CharClass.UPPER ? 1 : 0;
-		while (getCharClass(text[i + 1]) === getCharClass(text[i]) && i < text.length - 1) i++;
+		let i = charClassOf(text[0]) === CharClass.UPPER ? 1 : 0;
+		while (charClassOf(text[i + 1]) === charClassOf(text[i]) && i < text.length - 1) i++;
 		return { char: i + extraSpaceCnt + 1 };
 	}
 }
