@@ -1,4 +1,13 @@
-import { ExtensionContext, Position, Range, Selection, TextEditor, TextEditorEdit, commands } from "vscode";
+import {
+	ExtensionContext,
+	Position,
+	Range,
+	Selection,
+	TextDocument,
+	TextEditor,
+	TextEditorEdit,
+	commands,
+} from "vscode";
 
 export function activate(context: ExtensionContext): void {
 	context.subscriptions.push(
@@ -13,21 +22,19 @@ export function activate(context: ExtensionContext): void {
 
 function deleteFactory(mode: "backward" | "forward"): (editor: TextEditor, edit: TextEditorEdit) => void {
 	return (editor: TextEditor, edit: TextEditorEdit) => {
-		const deleteRanges = [];
-		for (let i = 0; i < editor.selections.length; i++) {
-			const delta = getDelta(editor, i, mode);
-			deleteRanges[i] = getDeleteRange(editor, i, delta);
+		for (const selection of editor.selections) {
+			const delta = getDelta(editor.document, selection, mode);
+			edit.delete(getDeleteRange(selection, delta));
 		}
-		for (const deleteRange of deleteRanges) edit.delete(deleteRange);
 	};
 }
 
 function moveFactory(mode: "backward" | "forward", anchor = false): (editor: TextEditor) => void {
 	return (editor: TextEditor) => {
 		const selections = [];
-		for (let i = 0; i < editor.selections.length; i++) {
-			const delta = getDelta(editor, i, mode);
-			selections[i] = getMovedSelection(editor, i, delta, anchor);
+		for (const selection of editor.selections) {
+			const delta = getDelta(editor.document, selection, mode);
+			selections.push(getMovedSelection(selection, delta, anchor));
 		}
 		editor.selections = selections;
 	};
@@ -54,11 +61,10 @@ function charClassOf(char: string): CharClass {
 	return CharClass.SYMBOL;
 }
 
-function getDelta(editor: TextEditor, selectionIndex: number, mode: "backward" | "forward"): Delta {
+function getDelta(doc: TextDocument, selection: Selection, mode: "backward" | "forward"): Delta {
 	const isBackward = mode === "backward";
 
-	const doc = editor.document;
-	const currPos = editor.selections[selectionIndex].active;
+	const currPos = selection.active;
 	const currLine = currPos.line;
 	const currLineRange = doc.lineAt(currLine).range;
 
@@ -97,16 +103,12 @@ function getDelta(editor: TextEditor, selectionIndex: number, mode: "backward" |
 	}
 }
 
-function getDeleteRange(editor: TextEditor, selectionIndex: number, delta: Delta): Range {
-	const currPos = editor.selections[selectionIndex].active;
+function getDeleteRange(selection: Selection, delta: Delta): Range {
+	const currPos = selection.active;
 	return new Range(currPos, currPos.translate(delta.line, delta.char));
 }
 
-function getMovedSelection(editor: TextEditor, selectionIndex: number, delta: Delta, anchor = false): Selection {
-	const currSelection = editor.selections[selectionIndex];
-	const newPos = new Position(
-		currSelection.active.line + (delta.line ?? 0),
-		currSelection.active.character + delta.char,
-	);
-	return new Selection(anchor ? currSelection.anchor : newPos, newPos);
+function getMovedSelection(selection: Selection, delta: Delta, anchor = false): Selection {
+	const newPos = new Position(selection.active.line + (delta.line ?? 0), selection.active.character + delta.char);
+	return new Selection(anchor ? selection.anchor : newPos, newPos);
 }
