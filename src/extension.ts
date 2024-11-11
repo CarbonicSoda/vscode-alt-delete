@@ -69,36 +69,36 @@ function getDelta(doc: TextDocument, selection: Selection, mode: "backward" | "f
 	const currLineRange = doc.lineAt(currLine).range;
 
 	const editRange = new Range(currPos, isBackward ? currLineRange.start : currLineRange.end);
-	let text = doc.getText(editRange);
+	const text = doc.getText(editRange);
 	if (text.length === 0) {
 		if (isBackward && currLine > 0) return { char: doc.lineAt(currLine - 1).text.length, line: -1 };
 		if (!isBackward && currLine < doc.lineCount - 1) return { char: -doc.lineAt(currLine).text.length, line: 1 };
 	}
 
-	text = isBackward ? text.trimEnd() : text.trimStart();
-	if (!text) {
+	const trimmed = isBackward ? text.trimEnd() : text.trimStart();
+	if (!trimmed) {
 		if (isBackward) return { char: editRange.start.character - editRange.end.character };
 		return { char: editRange.end.character - editRange.start.character };
 	}
 
-	const extraSpaceCnt = text.length - text.length;
-	if (charClassOf(<string>text.at(isBackward ? -1 : 0)) === CharClass.UPPER) {
+	const extraSpaceCnt = text.length - trimmed.length;
+	if (charClassOf(<string>trimmed.at(isBackward ? -1 : 0)) === CharClass.UPPER) {
 		if (isBackward) return { char: -extraSpaceCnt - 1 };
-		if (charClassOf(text[1]) === CharClass.UPPER) return { char: extraSpaceCnt + 1 };
+		if (charClassOf(trimmed[1]) === CharClass.UPPER) return { char: extraSpaceCnt + 1 };
 	}
 
 	if (isBackward) {
 		let i = 1;
-		while (charClassOf(<string>text.at(-i - 1)) === charClassOf(<string>text.at(-i)) && i < text.length) i++;
+		while (charClassOf(<string>trimmed.at(-i - 1)) === charClassOf(<string>trimmed.at(-i)) && i < trimmed.length) i++;
 		if (
-			charClassOf(<string>text.at(-i - 1)) === CharClass.UPPER &&
-			charClassOf(<string>text.at(-i)) === CharClass.LOWER
+			charClassOf(<string>trimmed.at(-i - 1)) === CharClass.UPPER &&
+			charClassOf(<string>trimmed.at(-i)) === CharClass.LOWER
 		)
 			i++;
 		return { char: -i - extraSpaceCnt };
 	} else {
-		let i = charClassOf(text[0]) === CharClass.UPPER ? 1 : 0;
-		while (charClassOf(text[i + 1]) === charClassOf(text[i]) && i < text.length - 1) i++;
+		let i = charClassOf(trimmed[0]) === CharClass.UPPER ? 1 : 0;
+		while (charClassOf(trimmed[i + 1]) === charClassOf(trimmed[i]) && i < trimmed.length - 1) i++;
 		return { char: i + extraSpaceCnt + 1 };
 	}
 }
