@@ -39,6 +39,11 @@ const config = {
 		minimize: true,
 		minimizer: [
 			new terserPlugin({
+				terserOptions: {
+					compress: {
+						passes: 3,
+					},
+				},
 				extractComments: false,
 			}),
 		],
@@ -78,6 +83,11 @@ const browserConfig = {
 		minimize: true,
 		minimizer: [
 			new terserPlugin({
+				terserOptions: {
+					compress: {
+						passes: 3,
+					},
+				},
 				extractComments: false,
 			}),
 		],
