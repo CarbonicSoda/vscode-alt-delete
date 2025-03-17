@@ -37,7 +37,11 @@ const config = {
 	},
 	optimization: {
 		minimize: true,
-		minimizer: [new terserPlugin()],
+		minimizer: [
+			new terserPlugin({
+				extractComments: false,
+			}),
+		],
 	},
 };
 
@@ -72,7 +76,11 @@ const browserConfig = {
 	},
 	optimization: {
 		minimize: true,
-		minimizer: [new terserPlugin()],
+		minimizer: [
+			new terserPlugin({
+				extractComments: false,
+			}),
+		],
 	},
 	externals: {
 		vscode: "commonjs vscode",
