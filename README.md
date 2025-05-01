@@ -1,5 +1,5 @@
-<h3 align="center" style="margin-bottom: -10px">
-	<img src="https://raw.githubusercontent.com/CarbonicSoda/vscode-alt-delete/master/media/icon.png" width="100" alt="Alt-Delete Icon">
+<h3 align="center">
+	<img src="https://raw.githubusercontent.com/CarbonicSoda/vscode-alt-delete/master/media/icon.png" width="100" alt="Alt-Delete Icon" />
 	<p></p>
 	Alt-Delete for VSCode
 </h3>
@@ -7,16 +7,17 @@
 
 ## Features
 
-Ever found the Ctrl-Backspace shortcut and its similar counterparts to be inflexible or cumbersome to use?
+Ever found the Ctrl-Backspace shortcut and its similar counterparts to be
+inflexible or cumbersome to use?
 
 Alt-Delete comes to rescue!
 
 Alt-Delete provides keymaps of:
 
--   **Ctrl-Backspace** → **Alt-Backspace**
--   **Ctrl-Delete** → **Alt-Delete**
--   (shift+) **Ctrl-LeftArrow** → (shift+) **Alt-[< / -]**
--   (shift+) **Ctrl-RightArrow** → (shift+) **Alt-[> / +]**
+- **Ctrl-Backspace** → **Alt-Backspace**
+- **Ctrl-Delete** → **Alt-Delete**
+- (shift+) **Ctrl-LeftArrow** → (shift+) **Alt-[< / -]**
+- (shift+) **Ctrl-RightArrow** → (shift+) **Alt-[> / +]**
 
 > Keymaps are also supported with multiple selections.
 
